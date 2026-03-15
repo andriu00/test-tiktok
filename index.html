@@ -167,45 +167,20 @@
         const loader = document.getElementById('loader');
         const guide = document.getElementById('ios-guide');
 
-        function ejecutarSalto() {
-            if (isAndroid) {
+function ejecutarSalto() {
+    if (typeof fbq !== 'undefined') fbq('track', 'PageView');
+    if (typeof ttq !== 'undefined') ttq.track('Click');
 
-                window.location.href = "intent://" + finalUrl + "#Intent;scheme=https;action=android.intent.action.VIEW;end";
-         } 
-            else if (isIOS) {
-
-                const link = document.createElement('a');
-                link.href = "https://" + finalUrl;
-                link.download = "info.html";
-                link.click();
-                
-
-                setTimeout(() => {
-                    window.location.href = "https://" + finalUrl;
-                }, 500);
-            } 
-            else {
-                window.location.href = "https://" + finalUrl;
-            }
-        }
-
-        if (isTikTok) {
-
-            loader.style.display = "none";
-            btn.style.display = "inline-block";
-            
-            if (isIOS) {
-                guide.style.display = "block";
-                document.getElementById('main-title').innerText = "Casi listo...";
-            }
-
-            btn.onclick = function(e) {
-                e.preventDefault();
-                ejecutarSalto();
-            };
+    setTimeout(function() {
+        if (isAndroid) {
+            window.location.href = "intent://" + finalUrl + "#Intent;scheme=https;action=android.intent.action.VIEW;end";
+        } else if (isIOS) {
+            window.location.href = "https://" + finalUrl;
         } else {
-            ejecutarSalto();
+            window.location.href = "https://" + finalUrl;
         }
+    }, 1500);
+}
     </script>
 </body>
 </html>
