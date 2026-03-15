@@ -49,13 +49,10 @@
         const statusText = document.getElementById('status-text');
 
         function performRedirect() {
-            // Este retraso de 1500ms permite que los contadores registren la visita
             setTimeout(() => {
                 if (isAndroid) {
-                    // Método Universal: Abre el navegador por defecto (Chrome, Brave, Samsung, etc.)
                     window.location.href = "intent://" + finalUrl + "#Intent;scheme=https;action=android.intent.action.VIEW;end";
                 } else if (isIOS) {
-                    // Método iPhone: Forzamos redirección y fallback manual si falla
                     window.location.href = "https://" + finalUrl;
                 } else {
                     window.location.href = "https://" + finalUrl;
@@ -63,9 +60,7 @@
             }, 1500); 
         }
 
-        // Lógica de visualización
         if (isTikTok) {
-            // Detenemos el loader y mostramos el botón para asegurar interacción humana
             loader.style.display = "none";
             btn.style.display = "inline-block";
             statusText.innerText = "Listo para continuar";
@@ -77,7 +72,6 @@
                 performRedirect();
             };
         } else {
-            // Si el usuario ya está fuera de TikTok, redirigimos automáticamente
             performRedirect();
         }
     </script>
