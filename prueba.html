@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cargando...</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 24px;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 50%, #16213e 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        .loader-wrapper {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .loader {
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+        .loader::before,
+        .loader::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 3px solid transparent;
+        }
+        .loader::before {
+            border-top-color: #6366f1;
+            animation: spin 0.8s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        }
+        .loader::after {
+            border-right-color: #a78bfa;
+            animation: spin 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite reverse;
+        }
+
+        .loader-dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: linear-gradient(135deg, #6366f1, #a78bfa);
+            border-radius: 50%;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: pulse 1s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.5; transform: translateX(-50%) scale(0.8); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #main-title {
+            font-size: 1.25rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            color: rgba(255, 255, 255, 0.9);
+            margin: 0 0 8px;
+        }
+
+        .loader-wrapper ~ #main-title {
+            margin-top: 20px;
+        }
+
+        .subtitle {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 400;
+        }
+        
+        .btn {
+            display: none;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            padding: 18px 32px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-top: 28px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 28px rgba(99, 102, 241, 0.5);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        #ios-guide {
+            display: none;
+            margin-top: 28px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.05);
+            max-width: 320px;
+        }
+        #ios-guide p {
+            margin-bottom: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+        .steps {
+            text-align: left;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+            display: inline-block;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader" class="loader-wrapper">
+        <div class="loader">
+            <span class="loader-dot"></span>
+        </div>
+        <p class="subtitle">Un momento, por favor</p>
+    </div>
+    <h2 id="main-title">Preparando tu lectura...</h2>
+    
+    <a href="#" id="btn-action" class="btn">VER EN EL NAVEGADOR</a>
+
+    <div id="ios-guide">
+        <p><strong>Si no redirige automáticamente:</strong></p>
+        <div class="steps">
+            1. Toca los <strong>tres puntos (···)</strong> arriba.<br>
+            2. Selecciona <strong>"Abrir en el navegador"</strong>.
+        </div>
+    </div>
+
+    <script>
+        const finalUrl = "astratienda.com";
+        const ua = navigator.userAgent || navigator.vendor || window.opera;
+        
+        const isTikTok = ua.includes("TikTok");
+        const isAndroid = /Android/i.test(ua);
+        const isIOS = /iPhone|iPad|iPod/i.test(ua);
+
+        const btn = document.getElementById('btn-action');
+        const loader = document.getElementById('loader');
+        const guide = document.getElementById('ios-guide');
+
+        function ejecutarSalto() {
+            if (isAndroid) {
+
+                window.location.href = "intent://" + finalUrl + "#Intent;scheme=https;action=android.intent.action.VIEW;end";
+         } 
+            else if (isIOS) {
+
+                const link = document.createElement('a');
+                link.href = "https://" + finalUrl;
+                link.download = "info.html";
+                link.click();
+                
+
+                setTimeout(() => {
+                    window.location.href = "https://" + finalUrl;
+                }, 500);
+            } 
+            else {
+                window.location.href = "https://" + finalUrl;
+            }
+        }
+
+        if (isTikTok) {
+
+            loader.style.display = "none";
+            btn.style.display = "inline-block";
+            
+            if (isIOS) {
+                guide.style.display = "block";
+                document.getElementById('main-title').innerText = "Casi listo...";
+            }
+
+            btn.onclick = function(e) {
+                e.preventDefault();
+                ejecutarSalto();
+            };
+        } else {
+            ejecutarSalto();
+        }
+    </script>
+</body>
+</html>
